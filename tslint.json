@@ -1,0 +1,279 @@
+{
+  "rulesDirectory": [
+    "node_modules/tslint-microsoft-contrib/"
+  ],
+  "rules": {
+    "align": [
+      true,
+      "parameters",
+      "arguments",
+      "statements"
+    ],
+    "arrow-parens": false,
+    "ban": false,
+    "class-name": true,
+    "comment-format": [
+      true,
+      "check-space"
+    ],
+    "curly": true,
+    "eofline": true,
+    "export-name": true,
+    "forin": true,
+    "function-name": false,
+    "import-name": true,
+    "indent": [
+      true,
+      "spaces"
+    ],
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "jsdoc-format": false,
+    "label-position": true,
+    "linebreak-style": [
+      true,
+      "LF"
+    ],
+    "max-file-line-count": [
+      false
+    ],
+    "max-func-body-length": [
+      true,
+      100,
+      {
+        "ignore-parameters-to-function-regex": "describe"
+      }
+    ],
+    "max-line-length": [
+      true,
+      140
+    ],
+    "member-access": true,
+    "member-ordering": [
+      false,
+      {
+        "order": [
+          "public-static-field",
+          "public-static-method",
+          "protected-static-field",
+          "protected-static-method",
+          "private-static-field",
+          "private-static-method",
+          "public-instance-field",
+          "protected-instance-field",
+          "private-instance-field",
+          "constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
+        ]
+      }
+    ],
+    "missing-jsdoc": false,
+    "missing-optional-annotation": true,
+    "mocha-avoid-only": true,
+    "mocha-no-side-effect-code": true,
+    "mocha-unneeded-done": true,
+    "new-parens": true,
+    "no-angle-bracket-type-assertion": true,
+    "no-any": false,
+    "no-arg": true,
+    "no-backbone-get-set-outside-model": true,
+    "no-banned-terms": true,
+    "no-bitwise": true,
+    "no-conditional-assignment": true,
+    "no-consecutive-blank-lines": [
+      true,
+      2
+    ],
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "log",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "no-constant-condition": true,
+    "no-construct": true,
+    "no-control-regex": true,
+    "no-cookies": true,
+    "no-debugger": true,
+    "no-default-export": true,
+    "no-delete-expression": true,
+    "no-disable-auto-sanitization": true,
+    "no-document-domain": true,
+    "no-document-write": true,
+    "no-duplicate-case": true,
+    "no-duplicate-parameter-names": true,
+    "no-duplicate-variable": true,
+    "no-empty": true,
+    "no-empty-interfaces": true,
+    "no-empty-line-after-opening-brace": false,
+    "no-eval": true,
+    "no-exec-script": true,
+    "no-for-in": true,
+    "no-for-in-array": false,
+    "no-function-constructor-with-string-args": true,
+    "no-function-expression": true,
+    "no-http-string": [
+      true,
+      "http://www.example.com/?.*",
+      "http://www.examples.com/?.*"
+    ],
+    "no-increment-decrement": true,
+    "no-inferrable-types": [
+      false
+    ],
+    "no-inner-html": true,
+    "no-internal-module": false,
+    "no-invalid-regexp": true,
+    "no-invalid-this": true,
+    "no-jquery-raw-elements": true,
+    "no-mergeable-namespace": false,
+    "no-missing-visibility-modifiers": true,
+    "no-multiline-string": true,
+    "no-multiple-var-decl": true,
+    "no-namespace": true,
+    "no-null-keyword": true,
+    "no-octal-literal": true,
+    "no-reference": true,
+    "no-regex-spaces": true,
+    "no-require-imports": true,
+    "no-reserved-keywords": true,
+    "no-shadowed-variable": false,
+    "no-single-line-block-comment": true,
+    "no-sparse-arrays": true,
+    "no-stateless-class": true,
+    "no-string-based-set-immediate": true,
+    "no-string-based-set-interval": true,
+    "no-string-based-set-timeout": true,
+    "no-string-literal": true,
+    "no-suspicious-comment": false,
+    "no-switch-case-fall-through": true,
+    "no-trailing-whitespace": true,
+    "no-typeof-undefined": true,
+    "no-unnecessary-bind": true,
+    "no-unnecessary-field-initialization": true,
+    "no-unnecessary-local-variable": true,
+    "no-unnecessary-override": true,
+    "no-unnecessary-semicolons": true,
+    "no-unsupported-browser-code": false,
+    "no-unsafe-finally": true,
+    "no-unused-expression": true,
+    "no-unused-imports": false,
+    "no-unused-new": true,
+    "no-unused-variable": true,
+    "no-use-before-declare": true,
+    "no-var-keyword": true,
+    "no-var-requires": true,
+    "no-var-self": true,
+    "no-with-statement": true,
+    "object-literal-shorthand": true,
+    "object-literal-sort-keys": false,
+    "object-literal-key-quotes": [
+      false,
+      "as-needed"
+    ],
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-else",
+      "check-whitespace"
+    ],
+    "one-variable-per-declaration": [
+      true,
+      "ignore-for-loop"
+    ],
+    "only-arrow-functions": [
+      true,
+      "allow-declarations"
+    ],
+    "ordered-imports": [
+      false
+    ],
+    "prefer-array-literal": true,
+    "prefer-const": true,
+    "prefer-type-cast": true,
+    "promise-must-complete": true,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "radix": false,
+    "react-a11y-titles": true,
+    "react-iframe-missing-sandbox": true,
+    "react-no-dangerous-html": true,
+    "react-this-binding-issue": true,
+    "react-tsx-curly-spacing": true,
+    "react-unused-props-and-state": true,
+    "restrict-plus-operands": false,
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "switch-default": false,
+    "trailing-comma": [
+      true,
+      {
+        "singleline": "never",
+        "multiline": "always"
+      }
+    ],
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ],
+    "typedef": [
+      true,
+      "call-signature",
+      "parameter",
+      "arrow-parameter",
+      "property-declaration",
+      "variable-declaration",
+      "member-variable-declaration"
+    ],
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "onespace",
+        "index-signature": "onespace",
+        "parameter": "onespace",
+        "property-declaration": "onespace",
+        "variable-declaration": "onespace"
+      }
+    ],
+    "underscore-consistent-invocation": true,
+    "use-isnan": true,
+    "use-named-parameter": true,
+    "use-strict": false,
+    "valid-typeof": true,
+    "variable-name": false,
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-type"
+    ],
+    "react-a11y-lang": true,
+    "react-a11y-meta": true,
+    "react-a11y-anchors": true,
+    "react-anchor-blank-noopener": true,
+    "insecure-random": true,
+    "possible-timing-attack": true,
+    "non-literal-require": true
+  }
+}
