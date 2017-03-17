@@ -1,8 +1,11 @@
-# hawkly security
+# Bunjil
 
 This is a very opinionated authentication and authorization token/`Card` designed specifically for use with zero-trust microservices.
 
 It has a specific problem to solve, and outside of that scope is most likely not the right tool for your system. If however, it does look like the right tool you need to be able to ensure proper key managemnt and regular automatic key rotation for your implementation to be safe, secure and successful.
+
+**Is it done?**
+Not yet.
 
 ## Goal
 
