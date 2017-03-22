@@ -1,16 +1,26 @@
 import * as crypto from 'crypto';
 
-import {
-  CardClassification,
-} from './index';
-
 export class Warden {
 
   private keys: WardenKeySet[];
 
-  constructor(keys: WardenKeySet[]) {
+  // By default, how long an access token will be valid for
+  private defaultCardHoursValid: number;
+
+  constructor(keys: WardenKeySet[], defaultCardHoursValid?: number) {
     if (Array.isArray(keys) === false) {
-      throw new TypeError('key is not an array');
+      throw new TypeError('keys is not an array');
+    }
+    if (typeof defaultCardHoursValid !== undefined) {
+      if (typeof defaultCardHoursValid === 'number') {
+        this.defaultCardHoursValid = defaultCardHoursValid;
+      } else {
+        throw new TypeError('defaultCardHoursValid passed to the Warden was not a number');
+      }
+    } else {
+      // this libraries default is 1 hour. You can set it to whatever is appropriate for
+      // your use case by passing a number to the constructor
+      this.defaultCardHoursValid = 1;
     }
 
     // Check the keys are of the correct type
@@ -31,7 +41,6 @@ export class Warden {
         throw new TypeError('A key expires is not a number');
       }
     });
-    // TODO parse the keys so the newest is first, and any expired keys are discarded
     this.keys = keys;
   }
 
@@ -57,13 +66,28 @@ export class Warden {
 
   public async createCard(options: CreateCardOptions): Promise<string> {
     // TODO: typecheck the options
+    let expires: number;
+    if (typeof options.expires !== undefined) {
+      if (typeof options.expires === 'number') {
+        expires = options.expires;
+      } else {
+        throw new TypeError('options.expires passed to createCard but was not a number');
+      }
+    } else {
+      // this libraries default is 1 hour. You can set it to whatever is appropriate for
+      // your use case by passing a number to the constructor
+      const now: Date = new Date();
+
+      now.setHours(now.getHours() + this.defaultCardHoursValid);
+
+      expires = now.getTime();
+    }
 
     // Assemble the card
     const card: DehydratedCard = {
       u: options.uuid,
-      c: options.classification,
       r: options.roles,
-      i: options.issued || Date.now(),
+      e: expires,
     };
 
     // Add the tenant if there is one
@@ -142,18 +166,13 @@ export interface CreateCardOptions {
   // A unique identifier for the card holder
   uuid: string;
   // Optionally the tenant of which the card holder is part of
-  tenant?: string;
-
-  // This card's classification
-  classification: CardClassification;
+  tenant?: string[];
 
   // Roles assigned to the user, typically used for permissions
   roles: string[];
 
-  // The time when this card was created
-  // This should be used for testing the library, or if you need to correct
-  // for clock skew
-  issued?: number;
+  // When this card is no longer valid
+  expires?: number;
 };
 
 export interface WardenKeySet {
@@ -171,14 +190,13 @@ export interface DehydratedCard {
   u: string;
 
   // tenant: Optionally the tenant of which the card holder is part of
-  t?: string;
+  t?: string[];
 
   // classification: This card's classification
-  c: CardClassification;
 
   // roles: Roles assigned to the user, typically used for permissions
   r: string[];
 
   // issued: The time when this card was created
-  i: number;
+  e: number;
 }

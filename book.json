@@ -1,0 +1,7 @@
+{
+  "root": "./docs",
+  "title": "Bunjil",
+  "description": "Opinionated authentication and authorization token designed specifically for use with zero-trust microservices",
+  "author": "Owen Kelly",
+  "gitbook": ">= 3.0.0"
+}

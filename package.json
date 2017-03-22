@@ -5,10 +5,10 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
-  "repository": "https://github.com/hawkly/hawkly-libs-javascript/hawkly-bearer-token",
+  "repository": "https://github.com/hawkly/bunjil",
   "author": "Owen Kelly <owen@owenkelly.com.au>",
   "bugs": {
-    "url": "https://github.com/hawkly/hawkly-libs-javascript/issues"
+    "url": "https://github.com/hawkly/bunjil/issues"
   },
   "license": "MIT",
   "scripts": {
@@ -51,6 +51,7 @@
     "@types/node": "^7.0.5",
     "ava": "^0.18.2",
     "codecov": "^1.0.1",
+    "gitbook": "^3.2.2",
     "highland": "^2.10.2",
     "npm-scripts-info": "^0.3.6",
     "nyc": "^10.1.2",

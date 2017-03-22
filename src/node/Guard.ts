@@ -2,10 +2,7 @@ import * as crypto from 'crypto';
 
 import {
   Card,
-  CardClassification,
-  CardClassificationExpiryLengths,
 } from './index';
-
 import {
   DehydratedCard,
 } from './Warden';
@@ -70,8 +67,7 @@ export class Guard {
 
 
     // Check the card as not expired
-    const expiryTime: number = this.getClassificationExpiryTime(card.classification);
-    if (expiryTime < card.issued) {
+    if (Date.now() < card.expires) {
       throw new Error('Card has expired');
     }
     return card;
@@ -133,34 +129,13 @@ export class Guard {
     // check all the required fields are here, or throw
     const card: Card = {
       uuid: dehydratedCard.u,
-      classification: dehydratedCard.c,
       roles: dehydratedCard.r,
-      issued: dehydratedCard.i,
+      expires: dehydratedCard.e,
     };
     if (dehydratedCard.t) {
       card.tenant = dehydratedCard.t;
     }
     return card;
-  }
-
-  private getClassificationExpiryTime(classification: CardClassification): number {
-    const expires: Date = new Date();
-    switch (classification) {
-      case CardClassification.access:
-        expires.setMinutes(expires.getMinutes() + CardClassificationExpiryLengths.access);
-        return expires.getTime();
-
-      case CardClassification.refresh:
-        expires.setMinutes(expires.getMinutes() + CardClassificationExpiryLengths.refresh);
-        return expires.getTime();
-
-      case CardClassification.mfa:
-        expires.setMinutes(expires.getMinutes() + CardClassificationExpiryLengths.mfa);
-        return expires.getTime();
-
-      default:
-        throw new Error('Invalid card');
-    }
   }
 }
 
