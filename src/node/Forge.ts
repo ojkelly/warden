@@ -81,7 +81,7 @@ export class Forge {
 
     const rawKeys: ForgeKeySet[] = await Promise.all(
       [...Array(keySetCreateCount)].map(
-        async (_, i: number) => {
+        async (_: any, i: number) => {
           // Set a custom expiry time, to mimick if all these keys have been rotated
           const dayMultiple: number = i + 1 * 7;
           const expires: any = new Date();
@@ -114,7 +114,7 @@ export class Forge {
     const expiringKeys: string[] = [];
 
     wardenKeySetCollection.find((key: any) => {
-      const expireTimeCheck = new Date();
+      const expireTimeCheck: Date = new Date();
       expireTimeCheck.setTime(expireTimeCheck.getTime() + 8 * 86400000);
 
       if (key.expires > expireTimeCheck.getTime()) {
@@ -170,12 +170,12 @@ export class Forge {
     if (typeof this.guardKeySetDirectory !== 'string') {
       throw new Error('guardKeySetDirectory is not set');
     }
-    const wardenFileSearch = await fsp.exists(`${this.wardenKeySetDirectory}/wardenKeySetCollection.json`);
-    const guardFileSearch = await fsp.exists(`${this.guardKeySetDirectory}/guardKeySetCollection.json`);
+    const wardenFileSearch: boolean = await fsp.exists(`${this.wardenKeySetDirectory}/wardenKeySetCollection.json`);
+    const guardFileSearch: boolean = await fsp.exists(`${this.guardKeySetDirectory}/guardKeySetCollection.json`);
 
     if (wardenFileSearch && guardFileSearch) {
-      const wardenFile = await fsp.readJson(`${this.wardenKeySetDirectory}/wardenKeySetCollection.json`);
-      const guardFile = await fsp.readJson(`${this.guardKeySetDirectory}/guardKeySetCollection.json`);
+      const wardenFile: WardenKeySet[] = await fsp.readJson(`${this.wardenKeySetDirectory}/wardenKeySetCollection.json`);
+      const guardFile: GuardKeySet[] = await fsp.readJson(`${this.guardKeySetDirectory}/guardKeySetCollection.json`);
       // rotate the keys
       await this.processKeySetCollections(wardenFile, guardFile);
     } else {

@@ -1,3 +1,4 @@
+// tslint:disable
 import * as crypto from 'crypto';
 import * as fsp from 'fs-promise';
 

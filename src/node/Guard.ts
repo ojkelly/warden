@@ -39,7 +39,7 @@ export class Guard {
   // Check the card is valid, and if it is return the card
   public checkCard(cardString: string): Card {
 
-    const cardBuffer = new Buffer(cardString, 'base64').toString('utf8');
+    const cardBuffer: string = new Buffer(cardString, 'base64').toString('utf8');
 
     const cardArray: string[] = cardBuffer.split('.');
     const encrypted: string = cardArray[0];
@@ -53,7 +53,7 @@ export class Guard {
 
     // Decypt the card
     const decrypted: any = this.decryptCard(encrypted, encryptedAuth, keySet.symmetric, iv);
-    const checkSignature = this.checkSignature(
+    const checkSignature: boolean = this.checkSignature(
       decrypted.c,
       decrypted.s,
       keySet.publicKey,
@@ -102,13 +102,13 @@ export class Guard {
   }
 
   private decryptCard(encrypted: string, auth: string, symmetric: string, iv: string): any {
-    const decipher = crypto.createDecipheriv(
+    const decipher: any = crypto.createDecipheriv(
       'aes-256-gcm',
       new Buffer(symmetric, 'hex'),
       new Buffer(iv, 'hex'),
     );
     decipher.setAuthTag(new Buffer(auth, 'hex'));
-    let deciphered = '';
+    let deciphered: string = '';
     deciphered += decipher.update(encrypted, 'hex', 'utf8');
     deciphered += decipher.final('utf8');
     return JSON.parse(deciphered);
@@ -119,7 +119,7 @@ export class Guard {
     signature: string,
     publicKey: string,
   ): boolean {
-    const verify = crypto.createVerify('RSA-SHA256');
+    const verify: any = crypto.createVerify('RSA-SHA256');
     verify.update(JSON.stringify(card));
     return verify.verify(publicKey, new Buffer(signature, 'hex'));
   }

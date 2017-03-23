@@ -48,13 +48,13 @@ export class Warden {
    * Return the newest key
    */
   private getKeyPair(): WardenKeySet {
-    return this.keys.reduce((prev, current) => {
+    return this.keys.reduce((prev: WardenKeySet, current: WardenKeySet) => {
       return (prev.expires > current.expires) ? prev : current;
     });
   }
-  private getRandom(length = 24): Promise<string> {
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(Math.ceil(length / 2), (err, buf) => {
+  private getRandom(length: number = 24): Promise<string> {
+    return new Promise((resolve: Function, reject: Function) => {
+      crypto.randomBytes(Math.ceil(length / 2), (err: any, buf: Buffer) => {
         if (err) {
           reject(err);
         } else {
@@ -101,8 +101,8 @@ export class Warden {
 
   private async secureCard(card: DehydratedCard): Promise<string> {
     const keySet: WardenKeySet = this.getKeyPair();
-    const iv = await this.getRandom(16);
-    const cardSignature = this.createCardSignature(card, keySet.privateKey);
+    const iv: string = await this.getRandom(16);
+    const cardSignature: string = this.createCardSignature(card, keySet.privateKey);
     const {
       encrypted,
       auth,
@@ -119,8 +119,8 @@ export class Warden {
   // Create the card signature
   // This allows the Guard to verify the contents of
   // card came from a Warden
-  private createCardSignature(card, privateKey) {
-    const signature = crypto.createSign('RSA-SHA256');
+  private createCardSignature(card: DehydratedCard, privateKey: string): string {
+    const signature: any = crypto.createSign('RSA-SHA256');
     signature.update(JSON.stringify(card));
     return signature.sign(privateKey).toString('hex');
   }
@@ -130,7 +130,7 @@ export class Warden {
     encrypted: string,
     auth: string,
   } {
-    const cipher = crypto.createCipheriv(
+    const cipher: any = crypto.createCipheriv(
       'aes-256-gcm',
       new Buffer(symmetric, 'hex'),
       new Buffer(iv, 'hex'),
@@ -152,7 +152,7 @@ export class Warden {
   }
 
   // now create a HMAC of the crypted card
-  private createCardHMAC(encrypted, hmacKey) {
+  private createCardHMAC(encrypted: string, hmacKey: string): string {
     return crypto.createHmac(
       'sha256',
       hmacKey,
@@ -174,7 +174,7 @@ export interface CreateCardOptions {
 
   // When this card is no longer valid
   hoursUntilExpiry?: number;
-};
+}
 
 export interface WardenKeySet {
   publicKey: string;
