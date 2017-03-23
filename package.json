@@ -1,7 +1,7 @@
 {
   "name": "bunjil",
   "version": "0.1.7",
-  "description": "This is a very opinionated authentication and authorization token/`Card` designed specifically for use with zero-trust microservices.",
+  "description": "Authentication and authorization tokens designed specifically for use with zero-trust microservices.",
   "main": "lib/node/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/node/index.js",
