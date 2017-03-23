@@ -6,7 +6,12 @@
 Authentication and authorization tokens designed specifically for use with zero-trust microservices.
 
 **Is it done?**
+
 Yes. But it needs a security review.
+
+**Why does this exist?**
+
+[I wrote a post here](https://owenkelly.com.au/posts/bunjil/)
 
 ## Getting Started
 
