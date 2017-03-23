@@ -67,7 +67,7 @@ export class Guard {
 
 
     // Check the card as not expired
-    if (Date.now() < card.expires) {
+    if (Date.now() > card.expires) {
       throw new Error('Card has expired');
     }
     return card;

@@ -19,19 +19,18 @@ test('can encrypt and decrypt bearer token', async (t: any): Promise<void> => {
     'onCall',
   ];
 
-  const warden: Warden = new Warden(keys.wardenKeySetCollection);
+  const warden: Warden = new Warden(keys.wardenKeySetCollection, 1);
   const card: any = await warden.createCard({
     uuid,
     tenant,
     roles,
   });
-
   const guard: Guard = new Guard(keys.guardKeySetCollection);
 
   try {
     const userCard: Card = await guard.checkCard(card);
     t.is(userCard.uuid, uuid);
-    t.is(userCard.tenant, tenant);
+    t.deepEqual(userCard.tenant, tenant);
     t.deepEqual(userCard.roles, roles);
     t.pass();
   } catch (err) {

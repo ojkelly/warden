@@ -1,118 +1,123 @@
 # Bunjil
 
-This is a very opinionated authentication and authorization token/`Card` designed specifically for use with zero-trust microservices.
-
-It has a specific problem to solve, and outside of that scope is most likely not the right tool for your system. If however, it does look like the right tool you need to be able to ensure proper key managemnt and regular automatic key rotation for your implementation to be safe, secure and successful.
+Authentication and authorization tokens designed specifically for use with zero-trust microservices.
 
 **Is it done?**
-Not yet.
-
-## Goal
-
-A cryptographically secure token that can be passed from an `iam service` to an internal `service`
-via a public untrusted medium (browser, mobile device).
-
-The `Card` functions as a bearer token, where the bearer of the token/`Card` has access to the resources
-avaible to the `Card`.
-
-The `iam service` should be the only entity that can create the `Card`, but any
-internal `service` should be able to decrypt the token, read it's content, and verify that
-the contents were created by `iam service`.
+Almost.
 
 ## Getting Started
 
 This package is split into 3 main classes.
 
-The *Forge* manages your keys. It will generate and rotate keys for you. This is implemented as a discrete service.
+The *Forge* manages your keys. It will generate and rotate keys for you. You implemented as a discrete service.
 
-A *Warden* can create a `Card`, this is the bearer token you can pass around. This is implemented as a discrete service, the `IAM service`.
+A *Warden* can create a `Card`, this is the bearer token you can pass around. You add this to the service that provides authentication.
 
 A *Guard* can validate and extract the contents of a card. This is integrated into every service that needs to read a `Card`.
 
-In the `./examples` folder you will find an example of each service you need to implement.
+**How to create a `Card`**
 
-With Docker/Kubernetes or any other good container service you can manage the keys and key rotation easily. To ensure the ability to safely and regularly rotate keys, we will always maintain a key collection of at least 4 `key sets`. A `key set` contains a `public`/`private` RSA key pair, a 256 bit `symmetric` key, a 256 `hmac` key, and a timestamp of the `key set's` `expiry` date. These are split into two types of `key set`, the `WardenKeySet` which contains everything mentioned above, and a `GuardKeySet` which contains everything **except the `private` key**.
+```javascript
+import { Warden } from 'bunjil';
+import fsp from 'fs-promise';
 
-Because we have at least 4 `key sets` we group them into `WardenKeySetCollection` and `GuardKeySetCollection`.
+const wardenKeySetCollection = await fsp.readJson(`${Shared Warden keys folder}/wardenKeySetCollection.json`);
 
-You need two file mounts. One for the `WardenKeySetCollection` and one for the `GuardKeySetCollection`. Both must be mounted as read/write to the `forge service`. Then the `WardenKeySetCollection` should be mounted read-only to the `warden service`, and th `GuardKeySetCollection` should be mounted to any service implementing a `Guard`.
+// Create a new warden
+const warden = new Warden(wardenKeySetCollection);
+const card = await warden.createCard({
+  uuid: 'string',
+  tenant: [
+    'string',
+  ],
+  roles: [
+    'admin',
+    'editor',
+  ],
+  hoursUntilExpiry: 1,
+});
+console.log(card);
+// card:
+// ODJmY2ZiYTIyYzJhZjlmMjc2ZWNlZjhlY2QxNjIwN2ZkOWMzNWRkODBlOWY3MGJkM2EzYWM0MzQ2MzRhNTY0NjU3YjgzYzY1NWM2MmNjNmRmNGJlOGQ5NjA0YmRmY2JiMWZkZGRmN2QwMDc1M2RiZDkwZWY5Y2IyY2MxZjQzNzBjZDI3ZDM3NDFhOGZlZjY1MGM3Yjk2ZDgyNjhhZTU3M2MzZGUzODQ2YjJmM2E1OWUwZjUwZDNjOGU4MjcxNzBlZTZmYmM1YjkwZWMwOWRhNmVhZTZjMTE3ODI4YzhlZThiMWZjYWE4OThhNTc1MmYwYjYxMzU3NmYzMjlhZThjM2E3ZmEwNDg2MTc2YTJlYmY0OTljYTY5M2Q0ZDhlYzY4ZDZkZjUxZGY2NzkzYzdhODEzOTAzMmVjYTdlMTNiNjZkZjFjNTFjMDQ4NzdkZmY4YWFlZTQ5YmNkMjllOTJhOGEyMDVkNTdkMThjMWZjYWQyMDk2ZGRjMjZlNDc5MTViMWRjNWE4YWQ4MTEyN2E5M2I4MGMyYWJjM2Y0YzIyMGFjNzc1ZTY3OGJjOGVlOWQ2Y2JjY2NkMjVlOGI1OWYzNDIzNDM2OTNhYjRmYTYyNzgwMTU1NDEwZDY2YjA3NWQwNDY3NWE3YWM1ZGU0NTllODBhNTJjZDczZGM2N2E3MGUxOGNmNWE4OGUyODFiZWVlY2U5MTg3ZmRiNzYyYjk3YjhkZmNmYzVjZDI2YTJlOTMxMDkxOWQ1NWIwZTEwNjhiNGM5MzkwNzhhNzgzMjI0NTdlNzQ3NDAzZDE4ZDgwZTFiNGY4N2I0M2M1ZWFlZjVkNmJlNGM5ZmIyNjA1MThkYTRhOWJiZTFjY2YxY2E3MTM2OGEwNzk2ZjYzNTQzZTg4YTZhMDE5OTI0NDFiMmU1NjVmMTAwM2FlZDc1ZDI0YjBhNjk3MWM0NTJhNzMzNTlkMTRhZDdmZTYyMjg0MDRkZjhkZGUzMzBkZWM5NDQzMWU0YTBlNzMzOTYxZTIzNWY0ODg4ODhjZDEwNzZmMWNjZDg4ZTY5Y2FmMGEyZGZlMmUwMWVjLjBiNTlhODcxM2JhODI5MWUwM2UzZTg5ZDhlMWJiMWM5LjdiMjVjMTMyNTk4NDZiY2YuODJmNTM5NGQ1MTFiMWQxYzQ0Y2Q5ZDBlZTU4NGEzNTIxZDViNzE3ZTFmMWJhMDlhMzY3MjNkYzhlOWFkOTJmMA==
 
+```
 
-## Design
+How to use a card with a `Guard`
 
-### Requirements
+```javascript
+import { Guard } from 'bunjil';
+import fsp from 'fs-promise';
 
-1. A `Card` must function as a bearer token, where the bearer of the `Card` has access to resources allowed for that `Card`.
-2. A `Card` must only be created from a single anointed service deemed the `iam service` for Identity and Access Management; this requirement must be cryptographically guarenteed.
-3. A `Card's` contents must be opaque to the public, but transparent to internal services.
-4. A `Card's` integrity must be ensured (else the card is invalid) when in transit, this must be cryptographically guarenteed.
-5. A `Card` must have a well defined expiry time, that must be enforced.
-6. A `Card` can be of more than one type, but only one type at a time, and the types must be one of `access`, `refresh`, `mfa` (to request an mfa challenge), otherwise the `Card` is invalid. 
+const wardenKeySetCollection = await fsp.readJson(`${Shared Guard keys folder}/guardKeySetCollection.json`);
 
-### Explanation
-
-The `Card` is designed with a few layers for specific functions. From the inside out we have a JSON object representing the actual contents.
-
-First we sign the contents of the `Card` object (specifically we stringify the object, then sign the resulting string).
-
-We encrypt the `Card` and the `signature` with authentitcated encryption with a key shared between services, so our other services can decrypt it. We use authenticated encryption to ensure; the contents can only be read by
-our services, the integrity of the contents is assured, we have assurance that the contents was encrypted by us (that is, by any service with the key), and by signing it with the `private key`, we have assurance that it could only have come from the `iam service`.
-
-The authenticated encrypted uses an Initialisation Vector (`iv`) and outputs an `encrypted chunk` and
-an `authorisation tag`.
-
-We concatencate these together with periods (`.`) and sign the result with the
-private key (only held by the `iam service`). This provides a guareentee that the encrypted contents of the `Card` we're created by `iam service` (as that's the only service with the
-private key).
-
-We then HMAC that. This guarentees that the contents has not been modified in transit.
-
-
-Assumptions:
-There a a set of key pairs.
-Each key pair contains a `private`, `public` and `symmetric` key.
-
-`iam service` is the sole holder of the `private` keys.
-All `services` are holders of the `public` and `symmetric` keys.
-Clients (browsers/mobile) hold no keys, but do transit the token.
-
-### Protocol
-
-*Warden*
-
-**A Warden can issue cards to users.**
-
-1. Create a `Card`, which contains information about the user, and their roles.
-2. Choose a `keySet`.
-3. Sign the `Card` with the private key `keySet.privateKey`.
-4. Encrypt the `Card` and `signature` (from #3) with a shared key `keySet.symmetric`.
-5. Create a HMAC for the the encrypted `Card` + `signature` (result of #4).
-6. Concatenate `encrypted` and `hmac` into `encrypted.hmac`.
-
-*Guard*
-
-**A Guard can verify the authenticity and integrity of a card, and return the information stored on
-that card.**
-
-1. Split into `encrypted` and `hmac`.
-2. Check HMAC for `hmac` with all keys in the keySets, if valid return the keySet (else card invalid)
-3. Decrypt `encrypted` with `keySet` from #2.
-4. Check signature from result of #3 with `key.publicKey` from the `keySet` from #2.
-5. Hydrate the `Card` (property names are shrunk when sent on the wire).
-6. Check the `Card` has not expired.
-7. Return the `Card` object.
+try {
+    const checkedCard = await guard.checkCard(card);
+    console.log(checkedCard);
+  } catch (err) {
+    // Card is invalid
+  }
 
 
-*In practice*
+// checkedCard:
+// {
+//    uuid: '523b519b-cb8b-4fd5-8a46-ff4bab206fad',
+//    roles: [ 'engineer', 'onCall' ],
+//    expires: 1490232381669,
+//    tenant: [ '48d2d67d-2452-4828-8ad4-cda87679fc91' ]
+//  }
 
-1. The `token` is created by the `iam service`.
-2. The `token` is delivered to the users browser as a `HttpOnly` cookie.
-  - There is no reason or need for the browser to read the `token`, as it should be completely
-  opaque and unreadable. The browser will know the `token` is correct based on the response from
-  calling services with the `token`.
-3. The `token` is passed from the browser to a `service`.
-4. The `service` first checks the authenticity of the `token`, that it was created by `iam service`.
-5. Then the `service` decrypts the payload of the `token`, revealing some information about the user.
+```
+
+The key sets are managed by the `Forge` class. This class looks after key rotate and the initial generation.
+You should implement this as a completely seperate container, either running with an internal cronjob, or
+set to spin up every hour.
+
+Inside the container you need to have two file mounts, one for the Wardens keys and one the Guards. Pass the 
+location of these to the `Forge` constructor. The `Forge` will load up the files, check if any keys have expired,
+and rotate the collection if they have.
+
+How to check and rotate the keys with `Forge`
+
+```javascript
+import { Forge } from 'bunjil';
+
+const forge = new Forge({
+    // The path to the directory where the Warden keys are stored.
+    // This should be a mount shared with the Wardens.
+    // Forge needs read-write access, Wardens must have read-only
+    wardenKeySetDirectory: '/srv/wardenKeys',
+
+    // The path to the directory where the Guards keys are stored.
+    // This should be a mount shared with the Guards.
+    // Forge needs read-write access, Guards must have read-only
+    guardKeySetDirectory: '/srv/guardKeys',
+
+    // Optionally you can set the maximum number of key sets to
+    // keep on rotation. When a keyset expires it is replace with
+    // a new one.
+    maxKeySetsValid: 3,
+
+    // Optionally you can set the maximum number of days a keyset
+    // is valid for.
+    // This must be greater or equal to the maximum time a Card
+    // is valid for, becuase once the key a Card was created with
+    // is rotated, that Card becomes invalid.
+    maxKeySetValidDays: 5,
+})
+
+// This will check to see if any keys exist
+// Then it will either create new ones, or cycle through
+// and replace exipered ones.
+try {
+  await forge.rotateKeys();
+} catch(err){
+  console.warn(err);
+  // If this fails you should crash the process and try again
+  process.exit(1);
+}
+
+
+```
 
 
 TODO: examples with full docker/docker-compose examples of `forge service` container, `auth service` container, and `service` container.

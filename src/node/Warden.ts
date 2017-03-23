@@ -11,16 +11,17 @@ export class Warden {
     if (Array.isArray(keys) === false) {
       throw new TypeError('keys is not an array');
     }
-    if (typeof defaultCardHoursValid !== undefined) {
+    console.log('defaultCardHoursValid', defaultCardHoursValid, typeof defaultCardHoursValid);
+    if (typeof defaultCardHoursValid === undefined) {
+      // this libraries default is 1 hour. You can set it to whatever is appropriate for
+      // your use case by passing a number to the constructor
+      this.defaultCardHoursValid = 1;
+    } else {
       if (typeof defaultCardHoursValid === 'number') {
         this.defaultCardHoursValid = defaultCardHoursValid;
       } else {
         throw new TypeError('defaultCardHoursValid passed to the Warden was not a number');
       }
-    } else {
-      // this libraries default is 1 hour. You can set it to whatever is appropriate for
-      // your use case by passing a number to the constructor
-      this.defaultCardHoursValid = 1;
     }
 
     // Check the keys are of the correct type
@@ -67,13 +68,8 @@ export class Warden {
   public async createCard(options: CreateCardOptions): Promise<string> {
     // TODO: typecheck the options
     let expires: number;
-    if (typeof options.expires !== undefined) {
-      if (typeof options.expires === 'number') {
-        expires = options.expires;
-      } else {
-        throw new TypeError('options.expires passed to createCard but was not a number');
-      }
-    } else {
+
+    if (options.hoursUntilExpiry === undefined) {
       // this libraries default is 1 hour. You can set it to whatever is appropriate for
       // your use case by passing a number to the constructor
       const now: Date = new Date();
@@ -81,6 +77,12 @@ export class Warden {
       now.setHours(now.getHours() + this.defaultCardHoursValid);
 
       expires = now.getTime();
+    } else {
+      if (typeof options.hoursUntilExpiry === 'number') {
+        expires = options.hoursUntilExpiry;
+      } else {
+        throw new TypeError('options.expires passed to createCard but was not a number');
+      }
     }
 
     // Assemble the card
@@ -172,7 +174,7 @@ export interface CreateCardOptions {
   roles: string[];
 
   // When this card is no longer valid
-  expires?: number;
+  hoursUntilExpiry?: number;
 };
 
 export interface WardenKeySet {
