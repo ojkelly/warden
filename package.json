@@ -1,6 +1,6 @@
 {
   "name": "bunjil",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Authentication and authorization tokens designed specifically for use with zero-trust microservices.",
   "main": "lib/node/index.js",
   "typings": "lib/index.d.ts",

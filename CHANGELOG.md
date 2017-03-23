@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.10"></a>
+## [0.1.10](https://github.com/hawkly/bunjil/compare/v0.1.9...v0.1.10) (2017-03-23)
+
+
+
 <a name="0.1.9"></a>
 ## [0.1.9](https://github.com/hawkly/bunjil/compare/v0.1.8...v0.1.9) (2017-03-23)
 
