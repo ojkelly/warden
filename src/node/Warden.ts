@@ -11,7 +11,6 @@ export class Warden {
     if (Array.isArray(keys) === false) {
       throw new TypeError('keys is not an array');
     }
-    console.log('defaultCardHoursValid', defaultCardHoursValid, typeof defaultCardHoursValid);
     if (typeof defaultCardHoursValid === undefined) {
       // this libraries default is 1 hour. You can set it to whatever is appropriate for
       // your use case by passing a number to the constructor
