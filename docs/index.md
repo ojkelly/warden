@@ -138,6 +138,6 @@ You do however have control over the expiry length of `Cards`.
 TODO: examples with full docker/docker-compose examples of `forge service` container, `auth service` container, and `service` container.
 
 ---
-(hawkly.io)[https://hawkly.io]
+[hawkly.io](https://hawkly.io)
 
-(Owen Kelly)[https://owenkelly.com.au]
+[Owen Kelly](https://owenkelly.com.au)
