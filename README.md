@@ -1,19 +1,24 @@
 # Bunjil
 
+[![Build Status](https://travis-ci.org/hawkly/bunjil.svg?branch=master)](https://travis-ci.org/hawkly/bunjil)
+[![NSP Status](https://nodesecurity.io/orgs/hawklyio/projects/574d2c40-3802-4b60-9881-19845bf69b50/badge)](https://nodesecurity.io/orgs/hawklyio/projects/574d2c40-3802-4b60-9881-19845bf69b50)
+[![Known Vulnerabilities](https://snyk.io/test/npm/bunjil/badge.svg)](https://snyk.io/test/npm/bunjil)
+
 Authentication and authorization tokens designed specifically for use with zero-trust microservices.
 
 **Is it done?**
-Almost.
+Yes. But it needs a security review.
 
 ## Getting Started
 
 This package is split into 3 main classes.
 
-The *Forge* manages your keys. It will generate and rotate keys for you. You implemented as a discrete service.
+The `Forge` manages your keys. It will generate and rotate keys for you. You implemented this as a discrete service. Ideally as it's own container. The `Forge` manages two file shares, one for the `Warden` and one for the `Guard`. The keys are kept on these shares.
 
-A *Warden* can create a `Card`, this is the bearer token you can pass around. You add this to the service that provides authentication.
+A `Warden` can create a `Card`, this is the bearer token you can pass around. You add this to the service that provides authentication.
 
-A *Guard* can validate and extract the contents of a card. This is integrated into every service that needs to read a `Card`.
+A `Guard` can validate and extract the contents of a card. This is integrated into every service that needs to read a `Card`.
+
 
 **How to create a `Card`**
 
@@ -115,10 +120,19 @@ try {
   // If this fails you should crash the process and try again
   process.exit(1);
 }
-
-
 ```
 
+## Configuration
+
+This module is an answer to the state of JWT. In learning from the mistakes there, and apply that to
+the specific problem of authentication and authorization in a zero-trust microservices system, you have
+almost no configuration options.
+
+There is no capability to change the cryptography used, or how it's used. These options are baked into
+the library itself. Any change to the cryptography used, is considred a breaking change and will
+be identified with a major version bump.
+
+You do however have control over the expiry length of `Cards`.
 
 TODO: examples with full docker/docker-compose examples of `forge service` container, `auth service` container, and `service` container.
 
