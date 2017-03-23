@@ -2,9 +2,9 @@
   "name": "bunjil",
   "version": "0.1.5",
   "description": "This is a very opinionated authentication and authorization token/`Card` designed specifically for use with zero-trust microservices.",
-  "main": "lib/index.js",
+  "main": "lib/node/index.js",
   "typings": "lib/index.d.ts",
-  "module": "lib/index.js",
+  "module": "lib/node/index.js",
   "repository": "https://github.com/hawkly/bunjil",
   "author": "Owen Kelly <owen@owenkelly.com.au>",
   "bugs": {
