@@ -1,11 +1,8 @@
-# Bunjil
-
-[![Build Status](https://travis-ci.org/hawkly/bunjil.svg?branch=master)](https://travis-ci.org/hawkly/bunjil)
-[![codecov](https://codecov.io/gh/hawkly/bunjil/branch/master/graph/badge.svg)](https://codecov.io/gh/hawkly/bunjil)
-[![NSP Status](https://nodesecurity.io/orgs/hawklyio/projects/574d2c40-3802-4b60-9881-19845bf69b50/badge)](https://nodesecurity.io/orgs/hawklyio/projects/574d2c40-3802-4b60-9881-19845bf69b50)
-[![Known Vulnerabilities](https://snyk.io/test/npm/bunjil/badge.svg)](https://snyk.io/test/npm/bunjil)
+# Warden
 
 Authentication and authorization tokens designed specifically for use with zero-trust microservices.
+
+> I wrote this to explore an alternitive to JWT's in microservices. With a bit of work this could be turned into a production level security token, however at this stage the use cases are limited. I'm leaving this here as a proof of concept.
 
 **Is it done?**
 
