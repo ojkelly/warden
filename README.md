@@ -4,6 +4,8 @@ Authentication and authorization tokens designed specifically for use with zero-
 
 > I wrote this to explore an alternitive to JWT's in microservices. With a bit of work this could be turned into a production level security token, however at this stage the use cases are limited. I'm leaving this here as a proof of concept.
 
+> It was formerlly called `Bunjil` but, I've commandeered that named in a different project.
+
 **Is it done?**
 
 Yes. But it needs a security review.
