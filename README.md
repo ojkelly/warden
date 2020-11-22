@@ -1,10 +1,9 @@
-# Warden
+# Warden (Proof of Concept)
 
 Authentication and authorization tokens designed specifically for use with zero-trust microservices.
 
 > I wrote this to explore an alternitive to JWT's in microservices. With a bit of work this could be turned into a production level security token, however at this stage the use cases are limited. I'm leaving this here as a proof of concept.
 
-> It was formerlly called `Bunjil` but, I've commandeered that named in a different project.
 
 **Is it done?**
 
@@ -12,7 +11,7 @@ Yes. But it needs a security review.
 
 **Why does this exist?**
 
-[I wrote a post here](https://owenkelly.com.au/posts/bunjil/)
+[I wrote a post here](https://www.owenkelly.com.au/posts/2017/warden)
 
 ## Getting Started
 
@@ -28,7 +27,7 @@ A `Guard` can validate and extract the contents of a card. This is integrated in
 **How to create a `Card`**
 
 ```javascript
-import { Warden } from 'bunjil';
+import { Warden } from 'warden';
 import fsp from 'fs-promise';
 
 const wardenKeySetCollection = await fsp.readJson(`${Shared Warden keys folder}/wardenKeySetCollection.json`);
@@ -55,7 +54,7 @@ console.log(card);
 How to use a card with a `Guard`
 
 ```javascript
-import { Guard } from 'bunjil';
+import { Guard } from 'warden';
 import fsp from 'fs-promise';
 
 const wardenKeySetCollection = await fsp.readJson(`${Shared Guard keys folder}/guardKeySetCollection.json`);
@@ -89,7 +88,7 @@ and rotate the collection if they have.
 How to check and rotate the keys with `Forge`
 
 ```javascript
-import { Forge } from 'bunjil';
+import { Forge } from 'warden';
 
 const forge = new Forge({
     // The path to the directory where the Warden keys are stored.
@@ -139,9 +138,6 @@ be identified with a major version bump.
 
 You do however have control over the expiry length of `Cards`.
 
-TODO: examples with full docker/docker-compose examples of `forge service` container, `auth service` container, and `service` container.
-
 ---
-[hawkly.io](https://hawkly.io)
 
 [Owen Kelly](https://owenkelly.com.au)
